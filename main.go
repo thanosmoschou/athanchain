@@ -96,5 +96,5 @@ func makeNewTransaction() string {
 	fmt.Println("Amount: ")
 	fmt.Scanf("%d\n", &amount)
 
-	return fmt.Sprintf("%s sended to %s %v athancoins.", senderName, receiverName, amount)
+	return fmt.Sprintf("%s sent to %s %v athancoins.", senderName, receiverName, amount)
 }
