@@ -30,8 +30,9 @@ func main() {
 	blockchain = append(blockchain, genesisBlock)
 
 	var blockData []string = make([]string, 0)
-	var cont rune = 'Y'
-	for cont == 'Y' || cont == 'y' {
+	var cont bool = true
+
+	for cont {
 		transCtr++
 		blockData = append(blockData, makeNewTransaction())
 
@@ -48,15 +49,22 @@ func main() {
 		}
 
 		cont = askToContinue()
+		if !cont {
+			// add the remaining data to a new block before you finish.
+			newBlock := chain.NewBlock(prevIndex, blockData, prevHash)
+			blockchain = append(blockchain, newBlock)
+
+			printBlockchain(blockchain)
+		}
 	}
 
 }
 
-func askToContinue() rune {
+func askToContinue() bool {
 	var decision rune
 	fmt.Println("Continue? (Y/N)")
 	fmt.Scanf("%c\n", &decision)
-	return decision
+	return decision == 'Y' || decision == 'y'
 }
 
 func printBlockchain(blockchain []*chain.Block) {
