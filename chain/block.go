@@ -7,14 +7,8 @@ allowing you to understand its fundamental components
 and functionality.
 */
 
+// Package chain contains some useful tools that help to implement the blockchain.
 package chain
-
-import (
-	"crypto/sha256"
-	"encoding/hex"
-	"strings"
-	"time"
-)
 
 type Block struct {
 	Index     int
@@ -22,25 +16,15 @@ type Block struct {
 	Data      []string
 	PrevHash  string
 	Hash      string
+	Nonce     int
 }
 
+// NewBlock accepts the index of the previous block, the data of the previous block and its hash and
+// returns a pointer to the new block. Now PoW added to the process.
 func NewBlock(prevIndex int, data []string, prevHash string) *Block {
-	newIndex := prevIndex + 1
-	newTimestamp := time.Now().Format(time.RFC3339)
-	dataAsString := strings.Join(data, "-")
+	currBlockPointer := &Block{}
 
-	// Hash the whole block's data, including index, timestamp and prevHash
-	record := string(newIndex) + newTimestamp + dataAsString + prevHash
+	currBlockPointer.mine(prevIndex, data, prevHash)
 
-	h := sha256.New()
-	h.Write([]byte(record))
-	currHash := hex.EncodeToString(h.Sum(nil))
-
-	return &Block{
-		Index:     newIndex,
-		Timestamp: newTimestamp,
-		Data:      data,
-		PrevHash:  prevHash,
-		Hash:      currHash,
-	}
+	return currBlockPointer
 }
